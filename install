@@ -1,0 +1,5 @@
+#!/bin/sh
+DIR="$HOME/.local/share/gnome-shell/extensions/desktop-editor@naheel.com/"
+mkdir -p $DIR
+cp extension.js $DIR
+cp metadata.json $DIR
