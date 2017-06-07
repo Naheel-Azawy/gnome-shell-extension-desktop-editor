@@ -1,5 +1,10 @@
 #!/bin/sh
 DIR="$HOME/.local/share/gnome-shell/extensions/desktop-editor@naheel.com/"
+SCH="$DIR/schemas"
 mkdir -p $DIR
-cp extension.js $DIR
+mkdir -p $SCH
+cp *.js $DIR
+cp ./schemas/org.gnome.shell.extensions.desktop-editor.gschema.xml $SCH
 cp metadata.json $DIR
+cd $SCH
+glib-compile-schemas .

@@ -1,0 +1,8 @@
+#!/bin/sh
+./install
+DIR="$HOME/.local/share/gnome-shell/extensions/desktop-editor@naheel.com/"
+PKG="$DIR/desktop-editor@naheel.com.zip"
+CUR=`pwd`
+cd $DIR
+zip -r $PKG .
+mv $PKG $CUR
