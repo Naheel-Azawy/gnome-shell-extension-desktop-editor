@@ -51,9 +51,11 @@ function enable() {
 		this._appendMenuItem(_("Edit")).connect("activate", Lang.bind(this, function() {
 			path = this._source.app.get_app_info().get_filename();
 			su = path.startsWith(GLib.get_home_dir()) ? "" : p.get_string(P_KEY_SU) + " ";
-			editor = p.get_string(P_KEY_EDITOR);
-			let res = e(su + editor + " " + path);
-			// TODO show errors if any (res.e)
+			editor = p.get_string(P_KEY_EDITOR) + " ";
+			path = path.split(" ").join("\\ ");
+			let res = e(su + editor + path);
+			if (su && res.e != "undefined")
+				e("gnome-terminal -e 'bash -c \"sudo " + editor + path + "\"'");
 			if (Main.overview.visible) Main.overview.hide();
 		}));
 	});
