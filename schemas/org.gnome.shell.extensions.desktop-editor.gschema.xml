@@ -2,10 +2,13 @@
 <schemalist gettext-domain="gnome-shell-extensions-desktop-editor">
   <schema path="/org/gnome/shell/extensions/desktop-editor/" id="org.gnome.shell.extensions.desktop-editor">
     <key type="s" name="su">
-        <default>'beesu'</default>
+        <default>'gksu'</default>
     </key>
     <key type="s" name="editor">
         <default>'gedit'</default>
+    </key>
+    <key type="s" name="term">
+        <default>'tilix -a app-new-window  -x'</default>
     </key>
   </schema>
 </schemalist>

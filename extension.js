@@ -29,13 +29,23 @@ function remove_fun(parent, name) {
 }
 
 function e(c) {
-	let [res, out, err] = GLib.spawn_async(null, ["bash", "-c", c], null, GLib.SpawnFlags.SEARCH_PATH, null, null);
+	let [res, out, err] = GLib.spawn_async(null, ["bash", "-c", c], null, GLib.SpawnFlags.SEARCH_PATH, null);
 	return { r: String(res), o: String(out), e: String(err) };
 }
 
+function openTerminal(terminal, su, editor, path){
+	var editorCommand  = editor + " " + path;
+	var command = terminal + " 'bash -c \"" + su + " " + editorCommand + "\"'";
+	if (su == "su"){
+		command = terminal + " 'bash -c \"su -c \\\" " + editorCommand + " \\\"  \"'";
+	}
+	return e(command);
+}
 
 const P_KEY_SU = "su";
 const P_KEY_EDITOR = "editor";
+const P_KEY_TERMINAL = "term";
+const TERMINAL_SU = ["su", "sudo"];
 
 function init() {
 	//Convenience.initTranslations();
@@ -46,16 +56,25 @@ function enable() {
 	let su = "";
 	let editor = "";
 	let path = "";
+	let terminal = "";
+
 	inject_fun(AppDisplay.AppIconMenu.prototype, "_redisplay",  function() {
 		this._appendSeparator();
 		this._appendMenuItem(_("Edit")).connect("activate", Lang.bind(this, function() {
 			path = this._source.app.get_app_info().get_filename();
-			su = path.startsWith(GLib.get_home_dir()) ? "" : p.get_string(P_KEY_SU) + " ";
+			su = path.startsWith(GLib.get_home_dir()) ? "" : p.get_string(P_KEY_SU);
+
 			editor = p.get_string(P_KEY_EDITOR) + " ";
+			terminal = p.get_string(P_KEY_TERMINAL) + " ";
 			path = path.split(" ").join("\\ ");
-			let res = e(su + editor + path);
-			if (su && res.e != "undefined")
-				e("gnome-terminal -e 'bash -c \"sudo " + editor + path + "\"'");
+
+			if (TERMINAL_SU.indexOf(su) > -1){
+				openTerminal(terminal, su, editor, path);
+			}else{
+				let res = e(su + " " + editor + path);
+				if (su && res.e != "undefined")
+					openTerminal(terminal, su, editor, path);
+			}
 			if (Main.overview.visible) Main.overview.hide();
 		}));
 	});
