@@ -6,10 +6,11 @@
 		"3.20",
 		"3.22",
 		"3.24",
-		"3.26"
+		"3.26",
+		"3.30"
 	],
 	"url": "https://github.com/Naheel-Azawy/gnome-shell-extension-desktop-editor",
 	"settings-schema": "org.gnome.shell.extensions.desktop-editor",
 	"uuid": "desktop-editor@naheel.com",
-	"version": 3
+	"version": 4
 }

@@ -12,11 +12,12 @@ function _(s) { return s; }
 
 const P_KEY_SU = "su";
 const P_KEY_EDITOR = "editor";
+const P_KEY_TERMINAL = "term";
 
 function init() {
 	//Convenience.initTranslations();
 }
-		
+
 let counter = 1;
 
 const Settings = new GObject.Class({
@@ -30,28 +31,36 @@ const Settings = new GObject.Class({
 		this.spacing = 30;
 		this.row_spacing = 10;
 		this.p = Convenience.getSettings();
-		
+
 		let su_entry = new Gtk.Entry({halign: Gtk.Align.END});
 		su_entry.set_sensitive(true);
 		su_entry.text = this.p.get_string(P_KEY_SU);
 		this.pushPref(_("GUI SU (beesu/gksu)"), su_entry);
-		
-		ed_entry = new Gtk.Entry({halign: Gtk.Align.END});
+
+		let ed_entry = new Gtk.Entry({halign: Gtk.Align.END});
 		ed_entry.set_sensitive(true);
 		ed_entry.text = this.p.get_string(P_KEY_EDITOR);
 		this.pushPref(_("Editor (gedit)"), ed_entry);
-		
+
+
+		let term_entry = new Gtk.Entry({halign: Gtk.Align.END});
+		term_entry.set_sensitive(true);
+		term_entry.text = this.p.get_string(P_KEY_TERMINAL);
+		this.pushPref(_("Terminal (when using su)"), term_entry);
+
+
 		let save_btn = new Gtk.Button({label: _("Save")});
 		save_btn.connect("clicked", Lang.bind(this, function(w){
 			this.p.set_string(P_KEY_SU, su_entry.text);
 			this.p.set_string(P_KEY_EDITOR, ed_entry.text);
+			this.p.set_string(P_KEY_TERMINAL, term_entry.text);
 			this.get_toplevel().close();
 		}));
 		this.attach(save_btn, 0, counter, 2, 1);
 		counter++;
 
 	},
-	
+
 	pushPref: function(title, wd) {
 		let lb = new Gtk.Label({
 			label: _(title),
